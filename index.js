@@ -10,12 +10,9 @@ import { context } from "@actions/github";
 import axios from "axios";
 
 startGroup("Preparing CircleCI Pipeline Trigger");
-const payload = context.payload;
-const pattern = /github\.com\/(repos\/)?(.*)\/(.*)$/gm;
-const [, , repoOrg, repoName] = pattern.exec(payload.repository.url);
-info(`URL: ${payload.repository.url}`);
-info(`Org: ${repoOrg}`);
-info(`Repo: ${repoName}`);
+repo = ${context.repository}
+info(`URL: ${context.repositoryUrl}`);
+info(`Org/Repo: ${repo}`);
 const ref = context.ref;
 
 const getBranch = () => {
@@ -60,9 +57,9 @@ if (tag) {
   Object.assign(body, { branch });
 }
 
-const url = `https://circleci.com/api/v2/project/gh/${repoOrg}/${repoName}/pipeline`;
+const url = `https://circleci.com/api/v2/project/gh/${repo}/pipeline`;
 
-info(`Triggering CircleCI Pipeline for ${repoOrg}/${repoName}`);
+info(`Triggering CircleCI Pipeline for ${repo}`);
 info(`Triggering URL: ${url}`);
 if (tag) {
   info(`Triggering tag: ${tag}`);
